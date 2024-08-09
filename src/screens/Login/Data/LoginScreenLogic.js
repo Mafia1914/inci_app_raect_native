@@ -1,9 +1,8 @@
-
 import { Alert } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
+import { loginUser } from '../../../redux/Actions/autheSlice';
 
-export const handleLogin = async (username, password, navigation, setUsernameError, setPasswordError) => {
+export const handleLogin = async (username, password, navigation, dispatch, setUsernameError, setPasswordError) => {
   setUsernameError('');
   setPasswordError('');
 
@@ -23,29 +22,25 @@ export const handleLogin = async (username, password, navigation, setUsernameErr
   }
 
   try {
-    const isAuthenticated = true; 
+    const resultAction = await dispatch(loginUser({ username, password })).unwrap();
 
-    if (isAuthenticated) {
+    if (resultAction) {
+      const token = String(resultAction.token);
+
+      await SecureStore.setItemAsync('authToken', token);
+
       Alert.alert('Login Successful');
-      const token = 'mafial123'; 
-      await SecureStore.setItemAsync('token', token);
-
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'SlectionScreen' }], 
-        })
-      );
-    } else {
-      Alert.alert('Invalid credentials. Please try again.');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'home' }], 
+      });
     }
   } catch (error) {
-    console.error('Error during login:', error);
-    Alert.alert('Error', 'Something went wrong');
+    Alert.alert('Error', error.message || 'User does not exist');
   }
 };
 
-export const isValidEmail = (email) => {
+const isValidEmail = (email) => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailPattern.test(email);
 };

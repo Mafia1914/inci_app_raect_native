@@ -10,13 +10,14 @@ const CustomInput = ({
   error,
   password,
   onFocus = () => {},
+  style,
   ...props
 }) => {
   const [hidePassword, setHidePassword] = useState(password);
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View style={styles.inputWrapper}>
         <PaperInput
           {...props}

@@ -8,7 +8,8 @@ const AppConstants = {
     ForgetText: 'Forgot password?',
     Login: 'Login Now',
     DontHaveAccount:'Don’t have an Account?  ',
-    RegisterText:'Register Now'
+    RegisterText:'Register Now',
+    RegisterSinupText:'Register to continue with INCI'
 
 }
 

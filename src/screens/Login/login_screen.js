@@ -1,6 +1,7 @@
-// LoginScreen.js
 import React, { useState } from 'react';
 import { View, Image, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../redux/Actions/autheSlice'; 
 import ImageAssets from '../../utils/assets';
 import AppConstants from '../../utils/Constants';
 import CustomInput from '../../Components/CustomInput'; 
@@ -8,11 +9,14 @@ import Button from '../../Components/custom_button';
 import styles from './LoginStyles/LoginStyles';
 import CustomCheckBox from './Components/CustomCheckBox';
 import COLORS from '../../utils/colors';
+import { useNavigation } from '@react-navigation/native';
 import { handleLogin } from './Data/LoginScreenLogic';
-import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+
 
 export default function LoginScreen() {
-  const navigation = useNavigation(); // Initialize navigation hook
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -21,8 +25,8 @@ export default function LoginScreen() {
   const [passwordError, setPasswordError] = useState('');
 
   const onLoginPress = async () => {
-    console.log('Login button pressed'); // Debug log
-    await handleLogin(username, password, navigation, setUsernameError, setPasswordError);
+    console.log('Login button pressed');
+    await handleLogin(username, password, navigation, dispatch, setUsernameError, setPasswordError, isAuthenticated);
   };
 
   return (
@@ -64,11 +68,12 @@ export default function LoginScreen() {
           color={COLORS.primariColor}
           textColor={COLORS.darkprimariColor}
           onPress={onLoginPress}
+          disabled={loading}
         />
 
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>{AppConstants.DontHaveAccount}</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUpScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignupScreen')}>
             <Text style={styles.signUpLink}>{AppConstants.RegisterText}</Text>
           </TouchableOpacity>
         </View>
@@ -76,3 +81,5 @@ export default function LoginScreen() {
     </ScrollView>
   );
 }
+
+
