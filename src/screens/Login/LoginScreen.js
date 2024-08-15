@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Image, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../redux/Actions/autheSlice'; 
+import { loginUser } from '../../redux/Actions/action';
 import ImageAssets from '../../utils/assets';
 import AppConstants from '../../utils/Constants';
 import CustomInput from '../../Components/CustomInput'; 
@@ -11,6 +11,8 @@ import CustomCheckBox from './Components/CustomCheckBox';
 import COLORS from '../../utils/colors';
 import { useNavigation } from '@react-navigation/native';
 import { handleLogin } from './Data/LoginScreenLogic';
+import ForgetPassword from '../Forgot/ForgetPassword';
+
 
 
 export default function LoginScreen() {
@@ -58,7 +60,7 @@ export default function LoginScreen() {
             onPress={() => setRememberMe(!rememberMe)}
             label="Remember Me"
           />
-          <TouchableOpacity onPress={() => console.log("Forgot Password")} style={styles.forgotPasswordContainer}>
+          <TouchableOpacity onPress={() =>{navigation.navigate(ForgetPassword)} }style={styles.forgotPasswordContainer}>
             <Text style={styles.forgotPasswordText}>{AppConstants.ForgetText}</Text>
           </TouchableOpacity>
         </View>

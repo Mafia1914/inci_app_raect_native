@@ -1,13 +1,13 @@
 import { Alert } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { loginUser } from '../../../redux/Actions/autheSlice';
+import { loginUser } from '../../../../src/redux/Actions/action';
 
-export const handleLogin = async (username, password, navigation, dispatch, setUsernameError, setPasswordError) => {
-  setUsernameError('');
+export const handleLogin = async (email, password, navigation, dispatch, setemailError, setPasswordError) => {
+  setemailError('');
   setPasswordError('');
 
-  if (!isValidEmail(username.trim())) {
-    setUsernameError('Please enter a valid email');
+  if (!isValidEmail(email.trim())) {
+    setemailError('Please enter a valid email');
     return;
   }
 
@@ -22,7 +22,7 @@ export const handleLogin = async (username, password, navigation, dispatch, setU
   }
 
   try {
-    const resultAction = await dispatch(loginUser({ username, password })).unwrap();
+    const resultAction = await dispatch(loginUser({ email, password })).unwrap();
 
     if (resultAction) {
       const token = String(resultAction.token);

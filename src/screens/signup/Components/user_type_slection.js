@@ -2,23 +2,21 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import COLORS from '../../../utils/colors';
 
-const RadioButton = ({ onChange }) => {
-  const [selected, setSelected] = useState('');
-  
-
-  const options = [
-    { label: 'Male', value: 'm' },
-    { label: 'Female', value: 'f' }
+const UserTypeButton = ({ onChange }) => {
+  const [selected, setSelected] = useState(''); 
+  const EUserType = [
+    { label: 'Beautician', value: 'beautician' },
+    { label: 'Common Person', value: 'user' } 
   ];
 
   const handleSelection = option => {
-    setSelected(option.value); 
+    setSelected(option.value);
     onChange(option.value); 
   };
 
   return (
     <View style={styles.container}>
-      {options.map(option => (
+      {EUserType.map(option => (
         <TouchableOpacity
           key={option.value}
           style={styles.singleOptionContainer}
@@ -41,9 +39,8 @@ const styles = StyleSheet.create({
   },
   singleOptionContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    paddingRight: 12,
     marginHorizontal: 10,
-    paddingRight:50,
   },
   outerCircle: {
     width: 20,
@@ -67,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RadioButton;
+export default UserTypeButton;

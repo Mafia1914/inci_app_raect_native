@@ -1,59 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { LOGIN, REGISTER } from '../../config/urls';
 
-export const loginUser = createAsyncThunk(
-  'auth/loginUser',
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      const response = await fetch(LOGIN, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Login error:', errorData); 
-        throw new Error(errorData.message || 'Network response was not ok');
-      }
-
-      const data = await response.json();
-      console.log('Login response:', data); 
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message || 'Something went wrong');
-    }
-  }
-);
-
-export const registerUser = createAsyncThunk(
-  'auth/registerUser',
-  async ({ firstName, lastName, gender, dateOfBirth, email, countryCode, phone, password, role }, { rejectWithValue }) => {
-    try {
-      const response = await fetch(REGISTER, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ firstName, lastName, gender, dateOfBirth, email, countryCode, phone, password, role }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Registration error:', errorData); 
-        throw new Error(errorData.message || 'Network response was not ok');
-      }
-
-      const data = await response.json();
-      console.log('Registration response:', data);
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message || 'Something went wrong');
-    }
-  }
-);
+import { createSlice } from '@reduxjs/toolkit';
+import { loginUser,registerUser,forgetPasswordEmail } from './action';
 
 const authSlice = createSlice({
   name: 'auth',
@@ -106,6 +53,22 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload || 'Registration failed';
         console.error('Registration rejected:', action.payload);
+      })
+      .addCase(forgetPasswordEmail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        console.log('ForgetPassword pending...');
+      })
+      .addCase(forgetPasswordEmail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.token = action.payload.token;
+        state.isAuthenticated = true;
+        console.log('ForgetPassword fulfilled:', action.payload);
+      })
+      .addCase(forgetPasswordEmail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'ForgetPassword failed';
+        console.error('ForgetPassword rejected:', action.payload);
       });
   },
 });

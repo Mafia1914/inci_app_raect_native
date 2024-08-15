@@ -4,10 +4,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { View, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store'; 
-import SplashScreen from './src/screens/Splash/splash_screen';
-import LoginScreen from './src/screens/Login/login_screen';
-import HomScreen from './src/screens/Home/home'
-import SignupScreen from './src/screens/signup/signup';
+import SplashScreen from './src/screens/Splash/SplashScreen';
+import LoginScreen from './src/screens/Login/LoginScreen';
+import HomScreen from './src/screens/Home/HomeScreen'
+import SignupScreen from './src/screens/signup/SignupScreen';
+import ForgetPassword from './src/screens/Forgot/ForgetPassword'
+import OtpScreen from './src/screens/Otp/OtpScreen';
 
 const Stack = createStackNavigator();
 
@@ -40,6 +42,17 @@ const App = () => {
             <Stack.Screen
             name="SignupScreen"
             component={SignupScreen}
+            options={{ headerShown: false }}
+            />
+            <Stack.Screen
+            name="ForgetPassword"
+            component={ForgetPassword}
+            options={{ headerShown: false }}
+            />
+
+              <Stack.Screen
+            name="OtpScreen"
+            component={OtpScreen}
             options={{ headerShown: false }}
             />
           </Stack.Navigator>

@@ -9,8 +9,12 @@ const AppConstants = {
     Login: 'Login Now',
     DontHaveAccount:'Don’t have an Account?  ',
     RegisterText:'Register Now',
-    RegisterSinupText:'Register to continue with INCI'
-
+    RegisterSinupText:'Register to continue with INCI',
+    HelloText:'Hello!',
+    alreadyText:'Already have an Account?',
+    OtpTextEmail: 'Don’t worry! We are here to help.Enter \nyour Email to receive OTP.',
+    OtpText: 'Didn’t Received OTP? ',
+    TaphereText: 'Tap Here',
 }
 
 export default AppConstants

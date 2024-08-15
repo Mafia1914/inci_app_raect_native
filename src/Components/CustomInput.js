@@ -74,9 +74,8 @@ const CustomInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
-    marginVertical: 20,
-    marginHorizontal: 20,
+  
+   
   },
   inputWrapper: {
     position: 'relative', 

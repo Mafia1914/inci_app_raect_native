@@ -5,3 +5,5 @@ export const getApiUrl = (endpoint) => `${API_BASE_URL}${endpoint}`;
 export const LOGIN = getApiUrl('/api/auth/login');
 
 export const SIGNUP = getApiUrl('/api/auth/register');
+
+export const FORGETPASSWORD = getApiUrl('api/auth/forgot-password');
