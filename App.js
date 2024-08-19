@@ -10,6 +10,7 @@ import HomScreen from './src/screens/Home/HomeScreen'
 import SignupScreen from './src/screens/signup/SignupScreen';
 import ForgetPassword from './src/screens/Forgot/ForgetPassword'
 import OtpScreen from './src/screens/Otp/OtpScreen';
+import  ResetPasswordScreen from './src/screens/ResetPassword/ResetPassword'
 
 const Stack = createStackNavigator();
 
@@ -49,10 +50,15 @@ const App = () => {
             component={ForgetPassword}
             options={{ headerShown: false }}
             />
-
               <Stack.Screen
             name="OtpScreen"
             component={OtpScreen}
+            options={{ headerShown: false }}
+            />
+            
+            <Stack.Screen
+            name="ResetPasswordScreen"
+            component={ResetPasswordScreen}
             options={{ headerShown: false }}
             />
           </Stack.Navigator>

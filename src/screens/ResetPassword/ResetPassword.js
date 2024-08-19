@@ -1,107 +1,112 @@
 
-
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../../utils/colors';
 import AppConstants from '../../utils/Constants';
 import Button from '../../Components/custom_button';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { VerifyOTP } from '../../redux/Actions/action';
-import * as SecureStore from 'expo-secure-store';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ImageAssets from '../../utils/assets';
+import CustomInput from '../../Components/CustomInput';
+import { useDispatch } from 'react-redux';
+import { ResetPassword } from '../../redux/Actions/action';
+import * as SecureStore from 'expo-secure-store';
 
-const OtpScreen = () => {
+const ResetPasswordScreen = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [otp, setOtp] = useState(['', '', '', '', '', '']);
+    const route = useRoute();
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [email, setEmail] = useState('');
-    const inputs = useRef([]);
-    const { loading, error, otpData } = useSelector(state => state.auth);
+    const [token, setToken] = useState('');
 
     useEffect(() => {
-        const fetchEmail = async () => {
+        const fetchEmailAndToken = async () => {
             try {
                 const storedEmail = await SecureStore.getItemAsync('user_email');
+                const routeToken = route.params?.token || '';
+
                 if (storedEmail) {
                     setEmail(storedEmail);
                 } else {
                     console.error('Email not found in storage');
                     navigation.goBack(); 
+                    return;
+                }
+
+                if (routeToken) {
+                    setToken(routeToken);
+                } else {
+                    console.error('Token not found in route parameters');
+                    navigation.goBack(); 
+                    return;
                 }
             } catch (error) {
-                console.error('Failed to retrieve email from storage:', error);
+                console.error('Failed to retrieve email or token:', error);
                 navigation.goBack(); 
             }
         };
 
-        fetchEmail();
-    }, [navigation]);
+        fetchEmailAndToken();
+    }, [navigation, route.params]);
 
-    const handleOtpChange = (value, index) => {
-        const newOtp = [...otp];
-        newOtp[index] = value;
-        setOtp(newOtp);
+    const handleResetPassword = async () => {
+        if (password !== confirmPassword) {
+            Alert.alert('Error', 'Passwords do not match');
+            return;
+        }
 
-        if (value && index < newOtp.length - 1) {
-            inputs.current[index + 1]?.focus();
+        if (!email || !token) {
+            Alert.alert('Error', 'Email or token is missing. Please try again.');
+            return;
+        }
+
+        try {
+            dispatch(ResetPassword({ email, password, token }));
+            await SecureStore.deleteItemAsync('user_email');
+            Alert.alert('Success', 'Password reset successfully');
+            navigation.navigate('Login'); 
+        } catch (error) {
+            Alert.alert('Error', error.message || 'An error occurred');
         }
     };
-
-    const handleVerifyOtp = () => {
-        if (otp.join('').length === 6) {
-            dispatch(VerifyOTP({ email, otp: otp.join('') }));
-        } else {
-            Alert.alert('Error', 'Please enter a valid 6-digit OTP.');
-        }
-    };
-
-    useEffect(() => {
-        if (otpData?.success) {
-            console.log('OTP verified successfully, navigating to ResetPasswordScreen...');
-            navigation.navigate('ResetPasswordScreen', { token: otpData?.data?.token });
-        }
-    }, [otpData, navigation]);
-    
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                {/* <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                     <View style={styles.containerStyle}>
                         <Icon name="arrow-back" size={24} color={COLORS.white} />
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             <Image source={ImageAssets.forgetBackgroundImg} style={styles.imageStylee} />
             <View style={styles.bodyContinerStyle}>
-                <Text style={styles.ForgetTextStyle}>{AppConstants.otpText}</Text>
+                <Text style={styles.ForgetTextStyle}>{AppConstants.resetPasswordText}</Text>
                 <Text style={styles.otpTextStyle}>{AppConstants.otpdetailsText}</Text>
             </View>
 
-            <View style={styles.containerr}>
-                {otp.map((digit, index) => (
-                    <TextInput
-                        key={index}
-                        style={styles.box}
-                        maxLength={1}
-                        keyboardType="numeric"
-                        onChangeText={(value) => handleOtpChange(value, index)}
-                        value={digit}
-                        ref={(input) => {
-                            inputs.current[index] = input;
-                        }}
-                    />
-                ))}
-            </View>
+            <CustomInput
+                onChangeText={text => setPassword(text)}
+                label='Password'
+                password
+                style={styles.input}
+            />
+
+            <CustomInput
+                onChangeText={text => setConfirmPassword(text)}
+                label='Confirm Password'
+                password
+                style={styles.input}
+            />
 
             <Button
-                title={loading ? 'Loading...' : 'Confirm'}
+                title="Confirm"
                 color={COLORS.primariColor}
                 textColor={COLORS.darkprimariColor}
-                onPress={handleVerifyOtp}
-                disabled={loading}
+                onPress={handleResetPassword}
+                width={310}
             />
 
             <View style={styles.signupContainer}>
@@ -118,10 +123,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     imageStylee: {
         width: '100%',
-        height: 250,
+        height: 260,
         resizeMode: 'cover',
     },
     backButton: {
@@ -166,35 +173,23 @@ const styles = StyleSheet.create({
     tapStyle: {
         color: COLORS.darkprimariColor,
     },
-    containerr: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 30,
-    },
-    box: {
-        borderWidth: 1,
-        borderColor: 'black',
-        width: 40,
-        height: 40,
-        margin: 10,
-        textAlign: 'center',
-        fontSize: 20,
-    },
-    errorText: {
-        color: 'red',
-        textAlign: 'center',
-        marginTop: 10,
-    },
-    successText: {
-        color: 'green',
-        textAlign: 'center',
-        marginTop: 10,
-    },
+    input: {
+      height: 46,
+      width: '90%',
+      maxWidth: 312,
+      justifyContent: 'center',
+      marginTop: 10,
+      marginBottom: 50,
+  },
+    containerStyle: {
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(128, 128, 128, 0.1)',
+      borderRadius: 50,
+  },
 });
 
-export default OtpScreen;
-
-
-
+export default ResetPasswordScreen;
 

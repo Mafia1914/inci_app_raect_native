@@ -15,6 +15,9 @@ const AppConstants = {
     OtpTextEmail: 'Don’t worry! We are here to help.Enter \nyour Email to receive OTP.',
     OtpText: 'Didn’t Received OTP? ',
     TaphereText: 'Tap Here',
+    otpText: 'Send OTP',
+    otpdetailsText: 'Don’t worry! We are here to help',
+    resetPasswordText: 'ResetPassword',
 }
 
 export default AppConstants

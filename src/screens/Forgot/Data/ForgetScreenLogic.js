@@ -1,34 +1,46 @@
-
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { forgetPasswordEmail } from '../../../redux/Actions/action';
+import { validateEmail } from '../../../utils/validateionUtils';
+import { useState } from 'react';
 import { Alert } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native'; 
-import { forgetPasswordEmail } from '../../../redux/Actions/action'; 
+const useForgetPassword = () => {
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
 
-const handleForgeValidation = async (email, setEmailError,dispatch) => {
+    const handleForgetPassword = async () => {
+        setEmailError('');
+        const errors = validateEmail(email);
+        if (errors.email) {
+            setEmailError(errors.email);
+            return;
+        }
 
-    const navigation = useNavigation(); 
-
-    setEmailError('');
-    let errors = {};
-    if (!email) {
-        errors.email = 'Email is required.';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-        errors.email = 'Email is invalid.';
-    }
-    if (errors.email) {
-        setEmailError(errors.email);
-        return; 
-    }
+        try {
+            const result = await dispatch(forgetPasswordEmail({ email })).unwrap();
+            Alert.alert('OTP Sent');
+         navigation.navigate('OtpScreen');
+   
+            return result; 
+        } catch (error) {
+            Alert.alert('Error', error.message || 'An error occurred');
+            throw error; 
+        }
+    };
     
-    try {
 
-        await dispatch(forgetPasswordEmail({ email })).unwrap();
-    
-        Alert.alert('Forget Password Successful');
-        navigation.reset(Login);
-    } catch (error) {
-        Alert.alert('Error', error.message || 'User does not exist');
-    }
+    return {
+        email,
+        setEmail,
+        emailError,
+        handleForgetPassword
+    };
 };
 
-export default handleForgeValidation;
+
+export default useForgetPassword;
+
+
