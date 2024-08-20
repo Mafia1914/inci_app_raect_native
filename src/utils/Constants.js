@@ -18,6 +18,7 @@ const AppConstants = {
     otpText: 'Send OTP',
     otpdetailsText: 'Don’t worry! We are here to help',
     resetPasswordText: 'ResetPassword',
+    sendText:'Send Now'
 }
 
 export default AppConstants

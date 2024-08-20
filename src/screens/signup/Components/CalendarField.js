@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity ,Image} from 'react-native';
 import { TextInput as PaperInput } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import COLORS from '../../../utils/colors'; 
 import moment from 'moment-timezone';
 
+
+const calendarIcon = require('../../../assets/images/calander_icon.png');
+
 const CalendarField = ({ onDateChange }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const showDatePicker = () => setDatePickerVisible(true);
   const hideDatePicker = () => setDatePickerVisible(false);
@@ -30,24 +34,27 @@ const CalendarField = ({ onDateChange }) => {
       <View style={styles.inputWrapper}>
         <PaperInput
           value={selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : 'DD / MM / YYYY'}
-          onFocus={showDatePicker}
+          onFocus={() => setIsFocused(true)} 
+          onBlur={() => setIsFocused(false)} 
+          onPressIn={showDatePicker} 
           editable={false}
           mode="outlined"
           label="Birthday*"
           theme={{
             colors: {
-              primary: COLORS.darkprimariColor,
-              text: COLORS.darkprimariColor,
-              placeholder: COLORS.grey,
-              background: 'white',
-              outline: COLORS.darkprimariColor,
+              primary: COLORS.primariColor, 
+              text: COLORS.primariColor,   
+              placeholder: '#BCC9C6', 
+              background: 'white',  
+              outline: isFocused ? COLORS.darkprimariColor : 'transparent', 
               error: COLORS.red,
+         
             },
           }}
-          style={styles.input}
+          style={[styles.input, isFocused && styles.inputFocused]} 
         />
         <TouchableOpacity style={styles.iconContainer} onPress={showDatePicker}>
-          <MaterialCommunityIcons name="calendar-today" size={24} color={COLORS.black} />
+        <Image source={calendarIcon} style={styles.calendarIconStyle} />
         </TouchableOpacity>
       </View>
       <DateTimePickerModal
@@ -76,14 +83,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     borderRadius: 5,
-    height: 60,
+    height: 46,
+  },
+  inputFocused: {
+    borderColor: COLORS.darkprimariColor, 
+    borderWidth: 1,
   },
   iconContainer: {
     position: 'absolute',
     right: 15,
     padding: 10,
   },
+  calendarIconStyle: {
+    marginRight:-15,
+    width: 20,
+    height: 20,
+  },
 });
 
 export default CalendarField;
-

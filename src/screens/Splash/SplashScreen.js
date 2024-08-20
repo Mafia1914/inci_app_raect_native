@@ -3,8 +3,10 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 import COLORS from '../../utils/colors';
-import ImageAssets from '../../utils/assets';
+
 import AppConstants from '../../utils/Constants';
+
+const appLogo = require('../../assets/images/app_logo.png');
 
 const SplashScreen = () => {
     const navigation = useNavigation();
@@ -46,7 +48,7 @@ const SplashScreen = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.textStyle}>{AppConstants.Animal}</Text>
-            <Image source={ImageAssets.appLogo} style={styles.imageStyle} />
+            <Image source={appLogo} style={styles.imageStyle} />
         </View>
     );
 };
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
         fontWeight: '500',
-        color: 'white',
+        color: 'balck',
     },
     imageStyle: {
         width: 230,

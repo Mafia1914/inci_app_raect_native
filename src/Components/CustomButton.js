@@ -1,15 +1,15 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View, Image } from 'react-native';
-import Colors from '../utils/colors'; 
+import COLORS from '../utils/colors';
 
-const Button = ({ title, onPress = () => {}, color = Colors.primariColor, textColor = Colors.white, width, iconRight }) => {
+const Button = ({ title, onPress = () => {}, color = Colors.primaryColor, textColor = Colors.white, width, iconRight }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.7}
-      style={[styles.button, { backgroundColor: color }, { width: width }]}>
+      style={[styles.button, { backgroundColor: color, width: width }]}>
       <View style={styles.textContainer}>
-        <Text style={[styles.text, { color: textColor }]}>
+        <Text style={[styles.text,  { color: textColor }]}>
           {title}
         </Text>
         {iconRight && (
@@ -22,26 +22,24 @@ const Button = ({ title, onPress = () => {}, color = Colors.primariColor, textCo
 
 const styles = StyleSheet.create({
   button: {
-    height: 55,
-    marginHorizontal: '5%',
+    height:48,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    marginVertical: 20,
     flexDirection: 'row',
   },
   textContainer: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     alignItems: 'center',
   },
   text: {
-    fontWeight: 'bold',
-    fontSize: 18,
+    fontWeight: '400',
+    fontSize: 14,
   },
   icon: {
-    width: 24, 
+    width: 24,
     height: 24,
-    marginLeft: 10, 
+    marginLeft: 10,
   }
 });
 

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { TextInput as PaperInput } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import COLORS from '../utils/colors'; // Ensure this path is correct
+import COLORS from '../../../utils/colors'; 
 
 const CustomInput = ({
   label,
-  iconName,
+  iconName, 
   error,
   password,
   onFocus = () => {},
@@ -40,7 +40,7 @@ const CustomInput = ({
               text: COLORS.primariColor,
               placeholder: '#BCC9C6',
               background: 'white',
-              outline: 'transparent',
+              outline: 'transparent', 
               error: COLORS.red,
             },
           }}
@@ -57,14 +57,14 @@ const CustomInput = ({
         {imageSource && (
           <Image
             source={imageSource}
-            style={styles.image}
+            style={styles.icon}
           />
         )}
         {iconName && (
           <MaterialCommunityIcons
             name={iconName}
             size={18}
-            color={isFocused ? COLORS.iconsColor : 'gray'}
+            color={isFocused ? '#00BFFF' : 'gray'}
             style={styles.icon}
           />
         )}
@@ -74,9 +74,9 @@ const CustomInput = ({
             style={styles.eyeIcon}
           >
             <MaterialCommunityIcons
-              name={hidePassword ? 'eye-off' : 'eye'}
+              name={hidePassword ? 'eye' : 'eye-off'}
               size={18}
-              color={COLORS.iconsColor}
+              color='#BCC9C6'
             />
           </TouchableOpacity>
         )}
@@ -93,26 +93,18 @@ const CustomInput = ({
 const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
-    borderRadius: 10,
   },
   inputWrapper: {
     position: 'relative',
-    overflow: 'hidden',
+  
+    overflow: 'hidden', 
   },
   input: {
     backgroundColor: 'white',
     height: 46,
     paddingHorizontal: 10,
-    borderRadius: 10,
-    fontSize: 16,
-  },
-  image: {
-    position: 'absolute',
-    left: 10,
-    top: '50%',
-    transform: [{ translateY: -11 }],
-    width: 20,
-    height: 20,
+    borderRadius: 10, 
+    fontSize: 16, 
   },
   icon: {
     position: 'absolute',

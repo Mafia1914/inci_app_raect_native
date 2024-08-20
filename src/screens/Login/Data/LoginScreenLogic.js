@@ -6,17 +6,18 @@ export const handleLogin = async (email, password, navigation, dispatch, setemai
   setemailError('');
   setPasswordError('');
 
-  if (!isValidEmail(email.trim())) {
+  if (email.trim() === '') {
+    setemailError('Please enter an email');
+    return;
+  } else if (!isValidEmail(email.trim())) {
     setemailError('Please enter a valid email');
     return;
   }
 
   if (password.trim() === '') {
-    setPasswordError('Please enter password');
+    setPasswordError('Please enter a password');
     return;
-  }
-
-  if (password.length < 5) {
+  } else if (password.length < 5) {
     setPasswordError('Password should be at least 5 characters long.');
     return;
   }
@@ -32,7 +33,7 @@ export const handleLogin = async (email, password, navigation, dispatch, setemai
       Alert.alert('Login Successful');
       navigation.reset({
         index: 0,
-        routes: [{ name: 'home' }], 
+        routes: [{ name: 'home' }],
       });
     }
   } catch (error) {

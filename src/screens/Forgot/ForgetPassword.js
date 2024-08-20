@@ -1,14 +1,18 @@
+
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert,StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../../utils/colors';
-import ImageAssets from '../../utils/assets';
 import AppConstants from '../../utils/Constants';
-import CustomInput from '../../Components/CustomInput';
-import Button from '../../Components/custom_button';
+import CustomInput from '../../components/CustomInput';
 import useForgetPassword from './Data/ForgetScreenLogic';
 import { useNavigation } from '@react-navigation/native';
-import { saveEmailToStorage, retrieveEmailFromStorage } from '../../utils/storageUtils'; 
+import { saveEmailToStorage, retrieveEmailFromStorage } from '../../utils/StorageUtils';
+import Button from '../../components/CustomButton'
+
+
+const forgetBackgroundImg = require('../../assets/images/forget_bakground_img.png');
+
 
 const ForgetPassword = () => {
     const navigation = useNavigation();
@@ -21,11 +25,11 @@ const ForgetPassword = () => {
 
     const handleSendOtp = async () => {
         try {
-            console.log('Attempting to save email and send OTP...');
-            await saveEmailToStorage(email); 
-            const result = await handleForgetPassword(); 
+            // console.log('Attempting to save email and send OTP...');
+            await saveEmailToStorage(email);
+            const result = await handleForgetPassword();
             console.log('OTP sending result:', result);
-            Alert.alert('Success', 'OTP sent successfully!');
+            // Alert.alert('Success', 'OTP sent successfully!');
         } catch (error) {
             console.error('Error in handleSendOtp:', error);
             Alert.alert('Error', error.message || 'An error occurred');
@@ -40,7 +44,7 @@ const ForgetPassword = () => {
                     setEmail(storedEmail);
                 }
             } catch (error) {
-                console.error('Failed to retrieve email from storage:', error);
+                // console.error('Failed to retrieve email from storage:', error);
             }
         };
 
@@ -49,6 +53,7 @@ const ForgetPassword = () => {
 
     return (
         <View style={styles.container}>
+               <StatusBar barStyle="light " backgroundColor="#346056" />
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                     <View style={styles.containerStyle}>
@@ -56,7 +61,7 @@ const ForgetPassword = () => {
                     </View>
                 </TouchableOpacity>
             </View>
-            <Image source={ImageAssets.forgetBackgroundImg} style={styles.imageStyle} />
+            <Image source={forgetBackgroundImg} style={styles.imageStyle} />
             <View style={styles.bodyContainer}>
                 <Text style={styles.forgetText}>{AppConstants.ForgetText}</Text>
                 <Text style={styles.otpText}>{AppConstants.OtpTextEmail}</Text>
@@ -65,22 +70,23 @@ const ForgetPassword = () => {
                 <CustomInput
                     onChangeText={text => setEmail(text)}
                     value={email}
-                    label='E-mail'
+                    label='E-mail*'
                     iconName="email-outline"
                     error={emailError}
                     style={styles.input}
                 />
-                <Button
-                    title="Send Now"
-                    color={COLORS.primaryColor}
-                    textColor={COLORS.darkPrimaryColor}
-                    onPress={handleSendOtp}
-                    width={300}
-                />
+
+                <View style={styles.buttonContainer}>
+                    <Button
+                        title={AppConstants.sendText}
+                        color={COLORS.primariColor}
+                        textColor={COLORS.darkprimariColor}
+                        onPress={handleSendOtp}
+                        width={300}
+                    />
+                </View>
                 <View style={styles.signupContainer}>
-                    <Text style={styles.signupText}>{AppConstants.OtpText}</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('ResetPasswordScreen')}>
-                        <Text style={styles.tapStyle}>{AppConstants.TapHereText}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -91,11 +97,11 @@ const ForgetPassword = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.white,
+        backgroundColor: '#F9F9F9',
     },
     imageStyle: {
         width: '100%',
-        height: 250,
+        height: '40%',
         resizeMode: 'cover',
     },
     backButton: {
@@ -117,9 +123,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     forgetText: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: '600',
-        color: COLORS.darkPrimaryColor,
+        color: COLORS.darkprimariColor,
         marginTop: 10,
     },
     otpText: {
@@ -128,7 +134,7 @@ const styles = StyleSheet.create({
         marginHorizontal: '10%',
         textAlign: 'center',
         fontWeight: '400',
-        color: COLORS.darkPrimaryColor,
+        color: COLORS.darkprimariColor,
     },
     inputContainer: {
         alignItems: 'center',
@@ -146,11 +152,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: '30%',
+        marginHorizontal: '20%',
         marginVertical: '10%',
     },
     tapStyle: {
-        color: COLORS.darkPrimaryColor,
+        color: COLORS.darkprimariColor,
     },
     containerStyle: {
         width: '100%',
@@ -169,7 +175,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         zIndex: 1,
     },
+    buttonContainer: {
+        alignItems: 'center',
+        width: '100%',
+        height: 48
+    },
 });
 
 export default ForgetPassword;
-

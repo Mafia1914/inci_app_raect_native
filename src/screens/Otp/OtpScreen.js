@@ -1,16 +1,17 @@
 
-
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import COLORS from '../../utils/colors';
+import Button from '../../components/CustomButton';
 import AppConstants from '../../utils/Constants';
-import Button from '../../Components/custom_button';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { VerifyOTP } from '../../redux/Actions/action';
 import * as SecureStore from 'expo-secure-store';
-import ImageAssets from '../../utils/assets';
+import COLORS from '../../utils/colors';
+
+
+const forgetBackgroundImg = require('../../assets/images/forget_bakground_img.png');
 
 const OtpScreen = () => {
     const navigation = useNavigation();
@@ -28,11 +29,11 @@ const OtpScreen = () => {
                     setEmail(storedEmail);
                 } else {
                     console.error('Email not found in storage');
-                    navigation.goBack(); 
+                    navigation.goBack();
                 }
             } catch (error) {
                 console.error('Failed to retrieve email from storage:', error);
-                navigation.goBack(); 
+                navigation.goBack();
             }
         };
 
@@ -63,7 +64,7 @@ const OtpScreen = () => {
             navigation.navigate('ResetPasswordScreen', { token: otpData?.data?.token });
         }
     }, [otpData, navigation]);
-    
+
 
     return (
         <View style={styles.container}>
@@ -74,7 +75,7 @@ const OtpScreen = () => {
                     </View>
                 </TouchableOpacity>
             </View>
-            <Image source={ImageAssets.forgetBackgroundImg} style={styles.imageStylee} />
+            <Image source={forgetBackgroundImg} style={styles.imageStylee} />
             <View style={styles.bodyContinerStyle}>
                 <Text style={styles.ForgetTextStyle}>{AppConstants.otpText}</Text>
                 <Text style={styles.otpTextStyle}>{AppConstants.otpdetailsText}</Text>
@@ -96,17 +97,20 @@ const OtpScreen = () => {
                 ))}
             </View>
 
-            <Button
-                title={loading ? 'Loading...' : 'Confirm'}
-                color={COLORS.primariColor}
-                textColor={COLORS.darkprimariColor}
-                onPress={handleVerifyOtp}
-                disabled={loading}
-            />
+            <View style={styles.buttonContainer}>
+                <Button
+                    title={loading ? 'Loading...' : 'Confirm'}
+                    color={COLORS.primariColor}
+                    textColor={COLORS.darkprimariColor}
+                    onPress={handleVerifyOtp}
+                    disabled={loading}
+                    width={300}
+                />
+            </View>
 
             <View style={styles.signupContainer}>
                 <Text style={styles.signupText}>{AppConstants.OtpText}</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <TouchableOpacity>
                     <Text style={styles.tapStyle}>{AppConstants.TaphereText}</Text>
                 </TouchableOpacity>
             </View>
@@ -160,8 +164,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: '30%',
-        marginVertical: '20%',
+
     },
     tapStyle: {
         color: COLORS.darkprimariColor,
@@ -174,12 +177,13 @@ const styles = StyleSheet.create({
     },
     box: {
         borderWidth: 1,
-        borderColor: 'black',
-        width: 40,
-        height: 40,
-        margin: 10,
+        borderColor: '#BCC9C6',
+        width: 50,
+        height: 60,
+        margin: 5,
         textAlign: 'center',
         fontSize: 20,
+        borderRadius: 10,
     },
     errorText: {
         color: 'red',
@@ -191,9 +195,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
     },
+    buttonContainer: {
+        marginVertical: 40,
+        alignItems: 'center',
+        width: '100%', 
+        height:48
+      },
 });
 
 export default OtpScreen;
+
 
 
 

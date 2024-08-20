@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, StyleSheet, Dimensions, TouchableOpacity, Text, ScrollView } from 'react-native';
-import BackgroundContainer from './Components/background_container';
+import BackgroundContainer from './Components/BackgroundContainer';
 import COLORS from '../../utils/colors';
 
 const { height, width } = Dimensions.get('window');

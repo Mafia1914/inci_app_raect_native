@@ -1,11 +1,11 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import BottomContainer from './Components/bottomConatiner'
+import BottomContainer from './components/bottomConatiner'
 
 export default function HomScreen() {
   return (
     <View>
-   <BottomContainer/>
+   {/* <BottomContainer/> */}
     </View>
   )
 }

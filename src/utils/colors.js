@@ -1,5 +1,6 @@
 
 const Colors = {
+    iconsColor:'#BCC9C6',
     white: '#fff',
     black: '#000',
     blue: '#5D5FEE',

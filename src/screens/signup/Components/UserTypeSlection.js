@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 20,
+    marginBottom:20
   },
   singleOptionContainer: {
     flexDirection: 'row',

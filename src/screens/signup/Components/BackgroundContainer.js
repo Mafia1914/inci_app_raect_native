@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import COLORS from '../../../utils/colors';
-import ImageAssets from '../../../utils/assets';
 import AppConstants from '../../../utils/Constants';
-import CustomInput from '../../../Components/CustomInput';
-import PhoneFiled from './phone_filed';
-import Button from '../../../Components/custom_button';
-import RadioButton from './radio_button';
-import CalanderFiled from './calander';
-import UserTypeButton from './user_type_slection';
+import CustomInput from './CustomInput';
+import PhoneFiled from './PhoneFiled';
+import Button from '../../../components/CustomButton';
+import RadioButton from './RadioButton';
+import CalendarField from './CalendarField';
+import UserTypeButton from './UserTypeSlection';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import handleRegister from '../Data/SignupLogics';
+
+const signupImg = require('../../../assets/images/sigup_background_img.png');
+const centerIgnupImg = require('../../../assets/images/center_img_signup.png');
+const icRightArrow = require('../../../assets/images/arrow_right.png');
 
 
 export default function BackgroundContainer() {
@@ -49,9 +52,9 @@ export default function BackgroundContainer() {
             </View>
           </TouchableOpacity>
         </View>
-        <Image source={ImageAssets.signupImg} style={styles.imageStylee} />
+        <Image source={signupImg} style={styles.imageStylee} />
         <View style={styles.containerr}>
-          <Image source={ImageAssets.centerIgnupImg} style={styles.imageStyle} />
+          <Image source={centerIgnupImg} style={styles.imageStyle} />
           <Text style={styles.welComStyle}>{AppConstants.HelloText}</Text>
           <Text style={styles.LoginTextStyle}>{AppConstants.RegisterSinupText}</Text>
 
@@ -98,16 +101,18 @@ export default function BackgroundContainer() {
               onChangeCountryCode={(code) => setCountryCode(code)}
             />
             <RadioButton onChange={setGender} />
-            <CalanderFiled onDateChange={date => setDateOfBirth(date)} />
+            <CalendarField onDateChange={date => setDateOfBirth(date)} />
             <UserTypeButton onChange={setRole} />
-            <Button
+            <View style={styles.buttonContainer}>
+             <Button
               title="Register Now"
               color={COLORS.primariColor}
               textColor={COLORS.darkprimariColor}
               onPress={onRegisterPress}
-              width={'90%'}
-              iconRight={ImageAssets.icRightArrow}
+              iconRight={icRightArrow}
+              width={300}
             />
+        </View>
             <View style={styles.signupContainer}>
               <Text style={styles.signupText}>{AppConstants.alreadyText}</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -116,8 +121,8 @@ export default function BackgroundContainer() {
             </View>
           </View>
 
-          {loading && <Text>Loading...</Text>}
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {/* {loading && <Text>Loading...</Text>}
+          {error && <Text style={styles.errorText}>{error}</Text>} */}
         </View>
       </View>
     </ScrollView>
@@ -127,15 +132,14 @@ export default function BackgroundContainer() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
+  
   },
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: 'center',
   },
   containerr: {
-    backgroundColor: 'white',
+    backgroundColor: '#F9F9F9',
     width: '100%',
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
@@ -156,7 +160,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 16,
+
   },
   input: {
     width: 148,
@@ -168,9 +172,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   imageStyle: {
-    width: 150,
-    height: 150,
-    marginTop: -120,
+    width: 110,
+    height: 110,
+    marginTop: -90,
   },
   welComStyle: {
     marginVertical: 10,
@@ -190,7 +194,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-    marginTop: 10,
+
+    marginHorizontal:10,
   },
   signupContainer: {
     flexDirection: 'row',
@@ -230,5 +235,11 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     backgroundColor: 'rgba(128, 128, 128, 0.1)',
     borderRadius: 50,
+  },
+  buttonContainer: {
+    marginVertical: 20,
+    alignItems: 'center',
+    width: '100%', 
+    height:48
   },
 });

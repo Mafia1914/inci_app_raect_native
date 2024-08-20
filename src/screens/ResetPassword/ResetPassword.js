@@ -1,16 +1,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../../utils/colors';
 import AppConstants from '../../utils/Constants';
-import Button from '../../Components/custom_button';
+import Button from '../../components/CustomButton';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import ImageAssets from '../../utils/assets';
-import CustomInput from '../../Components/CustomInput';
 import { useDispatch } from 'react-redux';
 import { ResetPassword } from '../../redux/Actions/action';
 import * as SecureStore from 'expo-secure-store';
+import CustomInput from '../../../src/components/CustomInput'
+
+
+const forgetBackgroundImg = require('../../assets/images/forget_bakground_img.png');
+
 
 const ResetPasswordScreen = () => {
     const navigation = useNavigation();
@@ -31,7 +33,7 @@ const ResetPasswordScreen = () => {
                     setEmail(storedEmail);
                 } else {
                     console.error('Email not found in storage');
-                    navigation.goBack(); 
+                    navigation.goBack();
                     return;
                 }
 
@@ -39,12 +41,12 @@ const ResetPasswordScreen = () => {
                     setToken(routeToken);
                 } else {
                     console.error('Token not found in route parameters');
-                    navigation.goBack(); 
+                    navigation.goBack();
                     return;
                 }
             } catch (error) {
                 console.error('Failed to retrieve email or token:', error);
-                navigation.goBack(); 
+                navigation.goBack();
             }
         };
 
@@ -66,7 +68,7 @@ const ResetPasswordScreen = () => {
             dispatch(ResetPassword({ email, password, token }));
             await SecureStore.deleteItemAsync('user_email');
             Alert.alert('Success', 'Password reset successfully');
-            navigation.navigate('Login'); 
+            navigation.navigate('Login');
         } catch (error) {
             Alert.alert('Error', error.message || 'An error occurred');
         }
@@ -74,14 +76,8 @@ const ResetPasswordScreen = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                {/* <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <View style={styles.containerStyle}>
-                        <Icon name="arrow-back" size={24} color={COLORS.white} />
-                    </View>
-                </TouchableOpacity> */}
-            </View>
-            <Image source={ImageAssets.forgetBackgroundImg} style={styles.imageStylee} />
+
+            <Image source={forgetBackgroundImg} style={styles.imageStylee} />
             <View style={styles.bodyContinerStyle}>
                 <Text style={styles.ForgetTextStyle}>{AppConstants.resetPasswordText}</Text>
                 <Text style={styles.otpTextStyle}>{AppConstants.otpdetailsText}</Text>
@@ -89,31 +85,25 @@ const ResetPasswordScreen = () => {
 
             <CustomInput
                 onChangeText={text => setPassword(text)}
-                label='Password'
+                label='Password*'
                 password
                 style={styles.input}
             />
 
             <CustomInput
                 onChangeText={text => setConfirmPassword(text)}
-                label='Confirm Password'
+                label='Confirm Password*'
                 password
                 style={styles.input}
             />
-
-            <Button
-                title="Confirm"
-                color={COLORS.primariColor}
-                textColor={COLORS.darkprimariColor}
-                onPress={handleResetPassword}
-                width={310}
-            />
-
-            <View style={styles.signupContainer}>
-                <Text style={styles.signupText}>{AppConstants.OtpText}</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.tapStyle}>{AppConstants.TaphereText}</Text>
-                </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+                <Button
+                    title="Confirm"
+                    color={COLORS.primariColor}
+                    textColor={COLORS.darkprimariColor}
+                    onPress={handleResetPassword}
+                    width={310}
+                />
             </View>
         </View>
     );
@@ -121,14 +111,13 @@ const ResetPasswordScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.backgroundColor,
         justifyContent: 'center',
         alignItems: 'center',
     },
     imageStylee: {
         width: '100%',
-        height: 260,
+        height: 200,
         resizeMode: 'cover',
     },
     backButton: {
@@ -153,7 +142,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: '600',
         color: COLORS.darkprimariColor,
-        marginTop: 10,
+        marginTop: 20,
     },
     otpTextStyle: {
         marginTop: 10,
@@ -162,6 +151,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '400',
         color: COLORS.darkprimariColor,
+        marginBottom:20
     },
     signupContainer: {
         flexDirection: 'row',
@@ -174,21 +164,25 @@ const styles = StyleSheet.create({
         color: COLORS.darkprimariColor,
     },
     input: {
-      height: 46,
-      width: '90%',
-      maxWidth: 312,
-      justifyContent: 'center',
-      marginTop: 10,
-      marginBottom: 50,
-  },
+        height: 46,
+        width: '85%',
+        marginBottom:20,
+        justifyContent: 'center',
+    },
     containerStyle: {
-      width: '100%',
-      height: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(128, 128, 128, 0.1)',
-      borderRadius: 50,
-  },
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(128, 128, 128, 0.1)',
+        borderRadius: 50,
+    },
+    buttonContainer: {
+        marginVertical: 50,
+        alignItems: 'center',
+        width: '100%',
+        height: 48
+    },
 });
 
 export default ResetPasswordScreen;
