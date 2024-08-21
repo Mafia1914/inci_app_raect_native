@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import BottomContainer from './components/bottomConatiner'
+
 
 export default function HomScreen() {
   return (
